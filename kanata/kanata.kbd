@@ -1,0 +1,88 @@
+(defcfg
+  process-unmapped-keys yes
+)
+
+;; 定義物理按鍵 (我們要處理的按鍵清單)
+(defsrc
+  caps
+  grv 1 2 3 4 5 6 7 8 9 0 - =
+      q w e r t y u i o p [ ] \
+      a s d f g h j k l ; ' 
+      z x c v b n m , . /  
+  lctl kana  spc eisu rctl
+)
+
+(defalias
+  ;; Caps Lock：單擊 F18，雙擊 Caps Lock
+  caps-dance (tap-dance 150 (f18 caps))
+  ;; Caps Lock 鍵：短按走 caps-dance，長按變 Left Control
+  capssw     (tap-hold 150 200 @caps-dance lctrl)  
+  ;; to-en (cmd /usr/bin/su - defu -c "DISPLAY=:0 /opt/homebrew/bin/macism com.apple.keylayout.US")
+  ;; to-zh (cmd /usr/bin/su - defu -c "DISPLAY=:0 /opt/homebrew/bin/macism org.openvanilla.inputmethod.McBopomofo.McBopomofo.Bopomofo")
+  ;; Left Control 鍵：單擊 F18 (切換輸入法)，長按/組合鍵為 Left Control
+  lctrl-ime  (tap-hold 150 200 f18 lctrl)
+
+  ;; 進入九宮格數字層 (短按 f，長按切換 number layer)
+  num        (tap-hold 150 200 f (layer-toggle number))
+  
+  ;; 一般情況下的符號 (Unicode 防禦)
+  u1 kp1  u2 kp2  u3 kp3
+  u4 kp4  u5 kp5  u6 kp6
+  u7 kp7  u8 kp8  u9 kp9
+  u0 kp0  u- kp-  u. kp. 
+  u+ kp+  u* kp*  u/ kp/
+  ;; --- 括號類 ---
+  ulb  (unicode u+005b) ;; [
+  urb  (unicode u+005d) ;; ]
+  ulc  (unicode u+007b) ;; {
+  urc  (unicode u+007d) ;; }
+  ulp  (unicode u+0028) ;; (
+  urp  (unicode u+0029) ;; )
+
+  ;; --- 標點與線條 ---
+  u_   (unicode u+005f) ;; _
+  ucln (unicode u+003a) ;; :
+  usme (unicode u+003b) ;; ;
+  udq  (unicode u+0022) ;; "
+  uqt  (unicode u+0027) ;; '
+  u=   (unicode u+003d) ;; =
+  u|   (unicode u+007c) ;; |
+  u\   (unicode u+005c) ;; \
+  udeg (unicode u+00b0) ;; 
+  ;; --- 比較與運算 ---
+  ugt  (unicode u+003e) ;; >
+  ult  (unicode u+003c) ;; <
+  uqst (unicode u+003f) ;; ?
+
+  ;; --- 第一排數字鍵符號 ---
+  u!   (unicode u+0021) ;; !
+  u@   (unicode u+0040) ;; @
+  u#   (unicode u+0023) ;; #
+  u$   (unicode u+0024) ;; $
+  u%   (unicode u+0025) ;; %
+  u^   (unicode u+005e) ;; ^
+  u&   (unicode u+0026) ;; &
+  u~   (unicode u+007e) ;; ~
+  u`   (unicode u+0060) ;; ` 
+)
+
+;; 基礎層 (平常的狀態)
+(deflayer default
+;; 維持注音輸入法的一般性
+  @capssw
+  _ _ _ _ _ _ _ _ _ _ _ _ _
+  _ _ _ _ _ _ _ _ _ _ _ _ _
+  _ _ _ @num _ _ _ _ _ _ _
+  _ _ _ _ _ _ _ _ _ _
+  @lctrl-ime _  _ _  _
+)
+(deflayer number
+  _
+  @u` @u! @u@ @u# @u$ @u% @u^ @u& @u~ @ulp @urp @u_ @uqt
+  @u/ @u* @u- @u+  _    @u7  @u8  @u9  @ulc  @urc @ulb @urb  @u\   
+  @ult @ugt @u=  _  @ugt  @u4 @u5 @u6 @ucln  @usme   @udq
+  @uqt  @u|   _   _   @udeg @u1 @u2 @u3  @u. @uqst
+  _ _ @u0 _  _
+) 
+
+
