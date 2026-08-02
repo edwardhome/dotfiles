@@ -25,8 +25,8 @@ if (Test-Path $VimrcTarget) {
 # ------------------------------------------------------------------------------
 # 2. Symlink .vim\autoload (vim-plug)
 # ------------------------------------------------------------------------------
-$AutoloadTarget = "$Dotfiles\vim\autoload"
-$VimHomeDir     = "$HOME\.vim"
+$AutoloadTarget = "$Dotfiles\vimfiles\autoload"
+$VimHomeDir     = "$HOME\vimfiles"
 
 if (!(Test-Path $VimHomeDir)) {
     New-Item -ItemType Directory -Path $VimHomeDir | Out-Null
