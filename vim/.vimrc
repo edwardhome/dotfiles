@@ -123,7 +123,7 @@ let g:tagbar_autofocus = 1
 " ==========================================
 if has('win32') || has('win64')
     " Windows 平台：自動抓取當前使用者的 $HOME (C:\Users\<Username>\ctags\ctags.exe)
-    let g:tagbar_ctags_bin = expand('$HOME/ctags/ctags.exe')
+    let g:tagbar_ctags_bin = expand('ctags.exe')
 elseif has('macunix')
     " macOS 平台 (Homebrew)
     let g:tagbar_ctags_bin = '/opt/homebrew/bin/ctags'
