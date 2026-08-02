@@ -23,7 +23,7 @@
   lctrl-ime  (tap-hold 150 200 f18 lctrl)
 
   ;; 進入九宮格數字層 (短按 f，長按切換 number layer)
-  num        (tap-hold 150 200 f (layer-toggle number))
+  num        (tap-hold 100 200 f (layer-toggle number))
   
   ;; 一般情況下的符號 (Unicode 防禦)
   u1 kp1  u2 kp2  u3 kp3
