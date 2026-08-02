@@ -51,7 +51,7 @@ if command -v brew &> /dev/null; then
     echo "[+] Checking macOS dependencies via Homebrew..."
     command -v rg &> /dev/null || { echo "[+] Installing ripgrep..."; brew install ripgrep; }
     command -v ctags &> /dev/null || { echo "[+] Installing universal-ctags..."; brew install universal-ctags; }
-    command -v macism &> /dev/null || { echo "[+] Installing macism..."; brew tap laishulu/macism && brew install macism; }
+    command -v macism &> /dev/null || { echo "[+] Installing macism..."; brew tap laishulu/homebrew && brew install laishulu/homebrew/macism;}
 else
     echo "[-] Homebrew not found. Please install Homebrew first."
 fi
