@@ -2,15 +2,11 @@
 # ==============================================================================
 # macOS Dotfiles Installer
 # ==============================================================================
-
 set -e
-
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 echo "=========================================="
 echo "   Deploying macOS Environment            "
 echo "=========================================="
-
 # ------------------------------------------------------------------------------
 # 1. 建立 Vim 設定檔軟連結 -> dotfiles/vim
 # ------------------------------------------------------------------------------
@@ -18,7 +14,6 @@ mkdir -p "$HOME/.vim"
 ln -sf "$DOTFILES/vim/.vimrc" "$HOME/.vimrc"
 ln -sf "$DOTFILES/vim/autoload" "$HOME/.vim/autoload"
 echo "[+] Symlink created: ~/.vimrc & ~/.vim/autoload"
-
 # ------------------------------------------------------------------------------
 # 2. 建立 Kanata 鍵盤配置軟連結 -> ~/.config/kanata/kanata.kbd
 # ------------------------------------------------------------------------------
@@ -27,7 +22,6 @@ if [ -f "$DOTFILES/kanata/kanata.kbd" ]; then
     ln -sf "$DOTFILES/kanata/kanata.kbd" "$HOME/.config/kanata/kanata.kbd"
     echo "[+] Symlink created: ~/.config/kanata/kanata.kbd"
 fi
-
 # ------------------------------------------------------------------------------
 # 3. 部署並載入 launchd plist 背景服務
 # ------------------------------------------------------------------------------
@@ -55,17 +49,6 @@ fi
 if command -v brew &> /dev/null; then
     echo "------------------------------------------"
     echo "[+] Checking macOS dependencies via Homebrew..."
-
-    # 1. GUI 應用程式 (Cask)
-    if ! brew list --cask karabiner-elements &> /dev/null; then
-        echo "[+] Installing Karabiner-Elements..."
-        brew install --cask karabiner-elements
-    else
-        echo "[=] Karabiner-Elements is already installed."
-    fi
-
-    # 2. CLI 工具 (Kanata, ripgrep, universal-ctags, macism)
-    command -v kanata &> /dev/null || { echo "[+] Installing kanata..."; brew install kanata; }
     command -v rg &> /dev/null || { echo "[+] Installing ripgrep..."; brew install ripgrep; }
     command -v ctags &> /dev/null || { echo "[+] Installing universal-ctags..."; brew install universal-ctags; }
     command -v macism &> /dev/null || { echo "[+] Installing macism..."; brew tap laishulu/macism && brew install macism; }
@@ -82,7 +65,6 @@ if ! command -v uv &> /dev/null; then
 else
     echo "[=] uv is already installed, skipping."
 fi
-
 echo "------------------------------------------"
 echo ">>> macOS deployment finished!"
 echo "=========================================="
