@@ -56,18 +56,13 @@ if command -v apt-get &> /dev/null; then
     echo "------------------------------------------"
     echo "[+] Checking Ubuntu dependencies via apt..."
     
-    # 檢查是否需要 sudo 安裝缺失工具
-    MISSING_PKGS=()
-    command -v rg &> /dev/null || MISSING_PKGS+=("ripgrep")
-    command -v ctags &> /dev/null || MISSING_PKGS+=("universal-ctags")
+    PKGS=""
 
-    if [ ${#MISSING_PKGS[@]} -gt 0 ]; then
-        echo "[+] Installing missing packages: ${MISSING_PKGS[*]}"
-        sudo apt-get update -qq
-        sudo apt-get install -y "${MISSING_PKGS[@]}"
-    else
-        echo "[=] Base CLI tools (rg, ctags) are already installed."
-    fi
+    echo "[+] Installing missing packages:$PKGS"
+    sudo apt-get update -qq
+    sudo apt-get install -y ripgrep
+    sudo apt-get install -y universal-ctags  
+    echo "[=] Base CLI tools (rg, ctags) are already installed."
 fi
 
 # ------------------------------------------------------------------------------
