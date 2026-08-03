@@ -25,18 +25,24 @@ if (Test-Path $VimrcTarget) {
 # ------------------------------------------------------------------------------
 # 2. Symlink .vim\autoload (vim-plug)
 # ------------------------------------------------------------------------------
-$AutoloadTarget = "$Dotfiles\vim\autoload"
-$VimHomeDir     = "$HOME\vimfiles"
+$VimHomeDir = "$HOME\vimfiles"
+$AutoloadPath = "$VimHomeDir\autoload"
+$AutoloadTarget = "$DOTFILES\vim\autoload"
 
-if (!(Test-Path $VimHomeDir)) {
-    New-Item -ItemType Directory -Path $VimHomeDir | Out-Null
+# 確保父目錄 C:\Users\Defu\vimfiles 存在
+if (-not (Test-Path $VimHomeDir)) {
+    New-Item -ItemType Directory -Path $VimHomeDir -Force | Out-Null
 }
 
-if (Test-Path $AutoloadTarget) {
-    New-Item -ItemType SymbolicLink -Path "$VimHomeDir\autoload" -Target $AutoloadTarget -Force | Out-Null
-    Write-Host "[+] Symlink created: .vim\autoload -> vim\autoload" -ForegroundColor Green
+# 若 C:\Users\Defu\vimfiles\autoload 已存在（無論是舊資料夾或舊連結），先強制刪除
+if (Test-Path $AutoloadPath) {
+    Remove-Item -Path $AutoloadPath -Recurse -Force -ErrorAction SilentlyContinue
+    Write-Host "[*] Removed existing path: $AutoloadPath"
 }
 
+# 強制建立 SymbolicLink
+New-Item -ItemType SymbolicLink -Path $AutoloadPath -Target $AutoloadTarget -Force
+Write-Host "[+] Symlink created: $AutoloadPath -> $AutoloadTarget"
 # ------------------------------------------------------------------------------
 # 3. Add bin\win and MinGW64 to User PATH
 # ------------------------------------------------------------------------------
