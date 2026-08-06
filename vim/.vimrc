@@ -90,26 +90,28 @@ set noshelltemp
 " 最大允許傳送 100,000 字元
 let g:oscyank_max_length = 100000
 
-" --- 快捷鍵映射：明確將內容寫入系統暫存器 (+) ---
-"  Visual Mode: 複製選取區域
-vnoremap <Leader>y "+y
-vnoremap "+y "+y
+" ==============================================================================
+" 3. 剪貼簿與 OSC 52 SSH 穿透設定 (保留 Vim 原生暫存器哲學)
+" ==============================================================================
+" 清空 clipboard，確保預設 y, d, c, p 完全使用 Vim 原生暫存器 ("1p, "2p, "ay, "ap)
+set clipboard=
 
-" Normal Mode: 複製當前行
-nnoremap <Leader>y "+yy
-nnoremap "+y "+yy
+" 最大允許傳送 100,000 字元
+let g:oscyank_max_length = 100000
+let g:oscyank_silent = 1
 
-" 貼上功能
+" --- 精準映射：複製並觸發 OSC 52 穿透 ---
+" Visual Mode: 選取後按下 "+y 或 <Leader>y，寫入 + 暫存器並觸發 OSC 52 傳回地端
+vnoremap "+y "+y:<C-u>OSCYankVisual<CR>
+vnoremap <Leader>y "+y:<C-u>OSCYankVisual<CR>
+
+" Normal Mode: 配合 motion（如 <Leader>yip 複製段落），寫入 + 暫存器並發送 OSC 52
+nnoremap "+y "+y:silent! call OSCYank() <CR>
+nnoremap <Leader>y "+y:silent! call OSCYank()<CR>
+
+" --- 貼上映射 ---
 nnoremap <Leader>p "+p
 vnoremap <Leader>p "+p
-
-" --- 自動事件：只要複製進 '+' 暫存器，立即觸發 OSC 52 穿透 SSH ---
-augroup OSCYankSSH
-      autocmd!
-        autocmd TextYankPost * if v:event.operator ==# 'y' && v:event.regname == '+' | execute 'OSCYankRegister +' | endif
-augroup END
-
-
 
 " ==============================================================================
 " 4. 快捷鍵映射
