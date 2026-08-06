@@ -77,26 +77,39 @@ set hlsearch
 set incsearch
 set ignorecase
 set smartcase
-
 " ==============================================================================
-" 3. 剪貼簿與 OSC 52 SSH 穿透設定 (保留 Vim 原生暫存器哲學)
+" " 3. 剪貼簿與 OSC 52 SSH 穿透設定 (保留 Vim 原生暫存器哲學)
+" "
 " ==============================================================================
-" 清空 clipboard，確保預設 y, d, c, p 完全使用 Vim 原生暫存器
-" 完美相容 Vim 原生文法："1p, "2p, "ay, "ap
+" " 清空 clipboard，維持 Vim 原生暫存器 ("1, "2, "a 等) 不受干擾
 set clipboard=
+"
+"" 避免 system() 生成實體 /tmp 暫存檔改走 Pipe，防止 E282 權限錯誤
+set noshelltemp
 
 " 最大允許傳送 100,000 字元
 let g:oscyank_max_length = 100000
 
-" 精準映射：只有明確輸入 "+y 或 <Leader>y 時，才將內容寫入系統暫存器並觸發 OSC 52 穿透 SSH
-nnoremap "+y "+y:silent! OSCYankRegister "+<CR>
-vnoremap "+y "+y:silent! OSCYankRegister "+<CR>
+" --- 快捷鍵映射：明確將內容寫入系統暫存器 (+) ---
+"  Visual Mode: 複製選取區域
+vnoremap <Leader>y "+y
+vnoremap "+y "+y
 
-" 快捷鍵輔助：使用 <Leader>y 與 <Leader>p 做系統剪貼簿互動（同樣具備 OSC 52 穿透）
-nnoremap <Leader>y "+y:silent! OSCYankRegister "+<CR>
-vnoremap <Leader>y "+y:silent! OSCYankRegister "+<CR>
+" Normal Mode: 複製當前行
+nnoremap <Leader>y "+yy
+nnoremap "+y "+yy
+
+" 貼上功能
 nnoremap <Leader>p "+p
 vnoremap <Leader>p "+p
+
+" --- 自動事件：只要複製進 '+' 暫存器，立即觸發 OSC 52 穿透 SSH ---
+augroup OSCYankSSH
+      autocmd!
+        autocmd TextYankPost * if v:event.operator ==# 'y' && v:event.regname == '+' | execute 'OSCYankRegister +' | endif
+augroup END
+
+
 
 " ==============================================================================
 " 4. 快捷鍵映射
