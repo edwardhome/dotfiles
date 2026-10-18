@@ -27,7 +27,9 @@ endif
   Plug 'tpope/vim-fugitive'
 
   " --- 中文整合相關 mac 專用 ---
-  Plug 'rlue/vim-barbaric'
+  if has('macunix')
+            Plug 'rlue/vim-barbaric'
+  endif
 
   " 左側檔案總管
   Plug 'preservim/nerdtree'
@@ -54,9 +56,18 @@ filetype plugin indent on   " 自動識別檔案類型並載入對應插件與�
 let mapleader = "\<Space>"  " 定義 Leader 鍵
 
 " --- 持久化撤銷 (Undo) 安全檢查 ---
-if !isdirectory(expand("~/.vim/undo"))
-    call mkdir(expand("~/.vim/undo"), "p")
+if has('win32') || has('win64')
+        let s:undo_dir = expand('$HOME/vimfiles/undo')
+else
+        let s:undo_dir = expand('~/.vim/undo')
 endif
+
+if !isdirectory(s:undo_dir)
+        call mkdir(s:undo_dir, "p")
+endif
+set undofile
+let &undodir = s:undo_dir
+
 set undofile
 set undodir=~/.vim/undo
 
