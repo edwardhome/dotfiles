@@ -1,0 +1,29 @@
+Host rock
+  HostName 192.168.0.5
+  User rock
+  IdentityAgent none
+  IdentityFile ~/.ssh/id_ed25519
+Host nas
+  HostName home-taichung.myds.me
+  User edward61221
+  port 50000
+Host eelab 
+  HostName 100.66.132.18
+  User ee
+  port 50000
+Host workstationz
+  HostName 100.104.72.43
+  User ee
+Host workstationx
+  HostName 100.94.209.92
+  User defu
+Host workstationy
+  HostName 100.126.231.57
+  User defu
+Host twpc0984
+    HostName 10.58.119.33
+    User yct\\2111368
+
+Host *
+  IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+
