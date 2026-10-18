@@ -22,6 +22,15 @@ if [ -f "$DOTFILES/kanata/kanata.kbd" ]; then
     ln -sf "$DOTFILES/kanata/kanata.kbd" "$HOME/.config/kanata/kanata.kbd"
     echo "[+] Symlink created: ~/.config/kanata/kanata.kbd"
 fi
+
+# ------------------------------------------------------------------------------
+# 3. 建立SSH config 
+# ------------------------------------------------------------------------------
+if [ -f "$DOTFILES/ssh/config" ]; then
+    mkdir -p "$HOME/.ssh/config"
+    ln -sf "$DOTFILES/ssh/config" "$HOME/.ssh/config"
+    echo "[+] Symlink created: ~/.ssh/config"
+fi
 # ------------------------------------------------------------------------------
 # 3. 部署並載入 launchd plist 背景服務
 # ------------------------------------------------------------------------------
